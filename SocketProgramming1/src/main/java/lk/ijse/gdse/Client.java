@@ -18,9 +18,9 @@ public class Client {
             //send the data
             dataOutputStream.writeUTF(massage);
 
-            DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+            /*DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
             String massage1 = dataInputStream.readUTF();
-            System.out.println(massage1);
+            System.out.println(massage1);*/
 
             //close
             socket.close();
