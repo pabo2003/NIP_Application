@@ -9,26 +9,33 @@ import java.util.Scanner;
 
 public class Server {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter Your massage:-");
-        String massage2 = scanner.nextLine();
-
         try {
+            boolean rem = true;
             //server socket
             ServerSocket serverSocket = new ServerSocket(3000);
             //local socket
             Socket socket = serverSocket.accept();
-            System.out.println("Client Accepted!");
+            do {
+//                System.out.println("Client Accepted!");
+                //data reading option
+                DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+                //sout
+                String massage = dataInputStream.readUTF();
+                if (massage != null) {
+                    System.out.println("Client's Massage : " + massage );
 
-            String massage1 = "hello!I'm Server";
-            DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-            dataOutputStream.flush();
-            dataOutputStream.writeUTF(massage2);
-            //data reading option
-            DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-            //sout
-            String massage = dataInputStream.readUTF();
-            System.out.println(massage);
+                    //request to the server
+                    System.out.println("Enter Server reply : ");
+                    String massage1 = new Scanner(System.in).nextLine();
+
+                    DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+                    dataOutputStream.flush();
+                    dataOutputStream.writeUTF(massage1);
+                }else {
+                    System.out.println("Client msg null");
+                    rem = false;
+                }
+            }while (rem);
             //close
             socket.close();
         }catch (IOException e){

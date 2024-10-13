@@ -4,24 +4,33 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client {
     public static void main(String[] args) {
         try {
+            boolean rem = true;
             //remote socket
             Socket socket = new Socket("localhost",3000);
-            //request to the server
-            String massage = "Hi!I'm from client";
-            DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            do {
+                //request to the server
+                System.out.println("Enter Massage : ");
+                String massage = new Scanner(System.in).nextLine();
+                DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+                dataOutputStream.writeUTF(massage);
+                dataOutputStream.flush();
 
-            dataOutputStream.flush();
-            //send the data
-            dataOutputStream.writeUTF(massage);
-
-            /*DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-            String massage1 = dataInputStream.readUTF();
-            System.out.println(massage1);*/
-
+//                System.out.println("Client accepted.");
+                //data reading option
+                DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+                String massage1 = dataInputStream.readUTF();
+                if (massage1 != null) {
+                    System.out.println("Reply : " + massage1);
+                } else {
+                    System.out.println("massage is null");
+                    rem = false;
+                }
+            }while (rem);
             //close
             socket.close();
         }catch (IOException e){
